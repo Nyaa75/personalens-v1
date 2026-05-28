@@ -1,0 +1,631 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "54e25508-734b-43f4-a135-36f210cb00ae",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "Tu es un expert en personas B2B. Tu réponds UNIQUEMENT avec un objet JSON valide, \nsans markdown, sans backticks, sans explication. \nTous les champs sont obligatoires, notamment conseils_commerciaux et ses 4 sous-champs. \nUn JSON incomplet est une erreur."
+            },
+            {
+              "content": "=Génère une persona B2B pour ce lead :\n- Nom : {{ $json.Prenom }} {{ $json.Nom }}\n- Titre : {{ $json.titre }}\n- Entreprise : {{ $json.entreprise }}\n- Secteur : {{ $json.secteur }}\n- Taille :  {{ $json.taille_entreprise }} employés\n- Pays : {{ $json.pays }}\n\nRetourne UNIQUEMENT ce JSON complet, tous les champs sont obligatoires :\n{\n  \"nom_persona\": \"string (ex: RevOps Stratège)\",\n  \"profil\": \"string (5 lignes — contexte, enjeux du moment)\",\n  \"motivations\": [\"string\", \"string\", \"string\"],\n  \"objections\": [\"string\", \"string\", \"string\"],\n  \"declencheurs_achat\": [\"string\", \"string\"],\n  \"style_communication\": \"string\",\n  \"canaux_preferes\": [\"string\", \"string\"],\n  \"score_maturite_achat\": number (0-100),\n  \"categorie\": \"string (Champion Potentiel / CFO Sceptique / Early Adopter / Bloqueur / Décideur Final)\",\n  \"score_confiance\": number (0-100),\n  \"conseils_commerciaux\": {\n    \"accroche_ideale\": \"string\",\n    \"arguments_cles\": [\"string\", \"string\", \"string\"],\n    \"erreurs_a_eviter\": [\"string\", \"string\"],\n    \"prochaine_action\": \"string\"\n  }\n}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "d195ebc8-e253-4bb1-abe0-afcbcfceabff",
+      "name": "Persona creation",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Jjefm_zcy6tuIizEWFwRuWIvIE-orXAybkKQAbnNpPA",
+          "mode": "list",
+          "cachedResultName": "Doc leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Jjefm_zcy6tuIizEWFwRuWIvIE-orXAybkKQAbnNpPA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Jjefm_zcy6tuIizEWFwRuWIvIE-orXAybkKQAbnNpPA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "lead_nom": "={{ $json.lead_nom }}",
+            "lead_entreprise": "={{ $json.lead_entreprise }}",
+            "lead_email": "={{ $json.lead_email }}",
+            "lead_titre": "={{ $json.lead_titre }}",
+            "profil": "={{ $json.profil }}",
+            "categorie": "={{ $json.categorie }}",
+            "score_maturite_achats": "={{ $json.score_maturite_achat }}",
+            "statut": "={{ $json.statut }}",
+            "date_generation": "={{ $json.date_generation }}",
+            "style_communication": "={{ $json.style_communication }}",
+            "accroche_ideale": "={{ $json.accroche_ideale }}",
+            "arguments_cles": "={{ $json.arguments_cles }}",
+            "erreurs_a_eviter": "={{ $json.erreurs_a_eviter }}",
+            "prochaine_action": "={{ $json.prochaine_action }}",
+            "score_confiance": "={{ $json.score_confiance }}",
+            "objections": "={{ $json.objections }}",
+            "motivations": "={{ $json.motivations }}",
+            "declencheurs_achat": "={{ $json.declencheurs_achat }}",
+            "nom_persona": "={{ $json.nom_persona }}",
+            "score_completude": "={{ $json.score_completude }}",
+            "alerte_email": "={{ $json.alerte_email }}"
+          },
+          "matchingColumns": [
+            "lead_email"
+          ],
+          "schema": [
+            {
+              "id": "lead_nom",
+              "displayName": "lead_nom",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_email",
+              "displayName": "lead_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lead_titre",
+              "displayName": "lead_titre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_entreprise",
+              "displayName": "lead_entreprise",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nom_persona",
+              "displayName": "nom_persona",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "profil",
+              "displayName": "profil",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "categorie",
+              "displayName": "categorie",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score_maturite_achats",
+              "displayName": "score_maturite_achats",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score_confiance",
+              "displayName": "score_confiance",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "statut",
+              "displayName": "statut",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date_generation",
+              "displayName": "date_generation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "objections",
+              "displayName": "objections",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "motivations",
+              "displayName": "motivations",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "style_communication",
+              "displayName": "style_communication",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "declencheurs_achat",
+              "displayName": "declencheurs_achat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "accroche_ideale",
+              "displayName": "accroche_ideale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "arguments_cles",
+              "displayName": "arguments_cles",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "erreurs_a_eviter",
+              "displayName": "erreurs_a_eviter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "prochaine_action",
+              "displayName": "prochaine_action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "score_completude",
+              "displayName": "score_completude",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "alerte_email",
+              "displayName": "alerte_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "474d4c59-345f-4c52-9192-85c0990f4767",
+      "name": "Add to Crm persona sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sRufYOJQCxM1mUGw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const text = $input.item.json.output[0].content[0].text\n  .replace(/```json|```/g, '')\n  .trim();\nconst persona = JSON.parse(text);\nconst lead = $('Get row(s) in sheet').item.json;\n\n// Calcul score complétude\nconst champsObligatoires = [lead.Prenom, lead.Nom, lead.email, lead.titre, lead.entreprise, lead.secteur, lead.taille_entreprise];\nconst champsRemplis = champsObligatoires.filter(c => c && c.toString().trim() !== '').length;\nconst scoreCompletude = Math.round((champsRemplis / champsObligatoires.length) * 100);\n\n// Validation domaine email\nconst domainEmail = lead.email ? lead.email.split('@')[1]?.toLowerCase() : '';\nconst nomEntreprise = lead.entreprise ? lead.entreprise.toLowerCase().replace(/\\s/g, '') : '';\nconst domainesGeneriques = ['gmail.com', 'yahoo.fr', 'yahoo.com', 'hotmail.com', 'outlook.com', 'test.com', 'example.com'];\nconst emailGenerique = domainesGeneriques.includes(domainEmail);\nconst emailCoherent = !emailGenerique && (\n  domainEmail.includes(nomEntreprise.substring(0, 4)) ||\n  nomEntreprise.includes(domainEmail.split('.')[0])\n);\nconst alerteEmail = emailGenerique\n  ? '⚠️ Email générique — vérifier le contact'\n  : !emailCoherent\n    ? '⚠️ Domaine email incohérent avec l\\'entreprise'\n    : '✅ Email vérifié';\n\n// Statut combiné\nconst statut = emailGenerique\n  ? 'À vérifier — email générique'\n  : scoreCompletude < 80\n    ? 'Données incomplètes'\n    : persona.score_confiance >= 70\n      ? 'Fiable'\n      : 'À vérifier';\n\nreturn {\n  json: {\n    // Lead\n    lead_nom: lead.Prenom + ' ' + lead.Nom,\n    lead_email: lead.email,\n    lead_titre: lead.titre,\n    lead_entreprise: lead.entreprise,\n\n    // Persona\n    nom_persona: persona.nom_persona,\n    profil: persona.profil,\n    categorie: persona.categorie,\n    style_communication: persona.style_communication,\n\n    // Scores\n    score_maturite_achat: persona.score_maturite_achat,\n    score_confiance: persona.score_confiance,\n    score_completude: scoreCompletude,\n    statut: statut,\n    alerte_email: alerteEmail,\n\n    // Arrays\n    motivations: Array.isArray(persona.motivations) ? persona.motivations.join(' | ') : persona.motivations || '',\n    objections: Array.isArray(persona.objections) ? persona.objections.join(' | ') : persona.objections || '',\n    declencheurs_achat: Array.isArray(persona.declencheurs_achat) ? persona.declencheurs_achat.join(' | ') : persona.declencheurs_achat || '',\n    canaux_preferes: Array.isArray(persona.canaux_preferes) ? persona.canaux_preferes.join(' | ') : persona.canaux_preferes || '',\n\n    // Conseils commerciaux\n    accroche_ideale: persona.conseils_commerciaux?.accroche_ideale || '',\n    arguments_cles: Array.isArray(persona.conseils_commerciaux?.arguments_cles) ? persona.conseils_commerciaux.arguments_cles.join(' | ') : persona.conseils_commerciaux?.arguments_cles || '',\n    erreurs_a_eviter: Array.isArray(persona.conseils_commerciaux?.erreurs_a_eviter) ? persona.conseils_commerciaux.erreurs_a_eviter.join(' | ') : persona.conseils_commerciaux?.erreurs_a_eviter || '',\n    prochaine_action: persona.conseils_commerciaux?.prochaine_action || '',\n\n    date_generation: new Date().toISOString()\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        976,
+        0
+      ],
+      "id": "bfb25c51-8c2d-4ae2-ae2c-0a3f66799475",
+      "name": "parsing + enrichissement"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Jjefm_zcy6tuIizEWFwRuWIvIE-orXAybkKQAbnNpPA",
+          "mode": "list",
+          "cachedResultName": "Doc leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Jjefm_zcy6tuIizEWFwRuWIvIE-orXAybkKQAbnNpPA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1100117519,
+          "mode": "list",
+          "cachedResultName": "leads input",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Jjefm_zcy6tuIizEWFwRuWIvIE-orXAybkKQAbnNpPA/edit#gid=1100117519"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3d0c4a0b-11b9-42b5-8f73-75294f21d0d1",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sRufYOJQCxM1mUGw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Jjefm_zcy6tuIizEWFwRuWIvIE-orXAybkKQAbnNpPA",
+          "mode": "list",
+          "cachedResultName": "Doc leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Jjefm_zcy6tuIizEWFwRuWIvIE-orXAybkKQAbnNpPA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1100117519,
+          "mode": "list",
+          "cachedResultName": "leads input",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Jjefm_zcy6tuIizEWFwRuWIvIE-orXAybkKQAbnNpPA/edit#gid=1100117519"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "traite": "oui",
+            "email": "={{ $json.lead_email }}"
+          },
+          "matchingColumns": [
+            "email"
+          ],
+          "schema": [
+            {
+              "id": "Prenom",
+              "displayName": "Prenom",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nom",
+              "displayName": "Nom",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "titre",
+              "displayName": "titre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "entreprise",
+              "displayName": "entreprise",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "secteur",
+              "displayName": "secteur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "taille_entreprise",
+              "displayName": "taille_entreprise",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "pays",
+              "displayName": "pays",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "traite",
+              "displayName": "traite",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1424,
+        0
+      ],
+      "id": "6b251a70-1fff-45f4-9adc-ebb849645c30",
+      "name": "update leads traité",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sRufYOJQCxM1mUGw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d2e079ff-9455-4dc5-9fa9-b67afe711417",
+              "leftValue": "={{ $json.traite }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "1b4df470-46c1-4a2d-babe-173a29e4bbe2",
+      "name": "filtre leads traité"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persona creation": {
+      "main": [
+        [
+          {
+            "node": "parsing + enrichissement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parsing + enrichissement": {
+      "main": [
+        [
+          {
+            "node": "Add to Crm persona sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "filtre leads traité",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add to Crm persona sheet": {
+      "main": [
+        [
+          {
+            "node": "update leads traité",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filtre leads traité": {
+      "main": [
+        [
+          {
+            "node": "Persona creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "50b1241c-d128-4ef7-8f28-ed669541710c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6e89b86a3e32113ad18aef17c061c6808ec7ac42af6409530f0da63b8a75eb64"
+  },
+  "id": "D70bfjIg406WjOqh",
+  "tags": []
+}
